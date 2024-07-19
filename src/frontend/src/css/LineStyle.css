@@ -1,9 +1,0 @@
-line{
-    background-color: var(--mainColor);
-    position: fixed;
-    bottom: 0;
-    background-color: grey;
-    width: 100%;
-    padding: .5em;
-    size: 1%;
-}
