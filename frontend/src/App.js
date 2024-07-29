@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Header1 from './components/Header1';
-import Header2 from './components/Header2';
-import Sidebar from './components/Sidebar';
-import MainContent from './components/MainContent';
-import Footer from './components/Footer';
-import Teams from './components/Teams';
-import Players from './components/Players';
-import About from './components/About';
+import Header1 from './components/common/Header1';
+import Header2 from './components/common/Header2';
+import Sidebar from './components/sidebar/Sidebar';
+import MainContent from './components/main/MainContent';
+import Footer from './components/common/Footer';
+import Teams from './components/teams/Teams';
+import Players from './components/players/Players';
+import About from './components/about/About';
 import './App.css';
 
 function App() {
