@@ -1,0 +1,40 @@
+import { NestedStack } from 'aws-cdk-lib';
+import { fileURLToPath } from 'node:url';
+/**
+ * Vends and caches nested stacks under a provided root stack
+ */
+export class NestedStackResolver {
+    rootStack;
+    attributionMetadataStorage;
+    stacks = {};
+    /**
+     * Initialize with a root stack
+     */
+    constructor(rootStack, attributionMetadataStorage) {
+        this.rootStack = rootStack;
+        this.attributionMetadataStorage = attributionMetadataStorage;
+    }
+    /**
+     * Proxy to getStackFor that appends attribution metadata for custom stacks
+     */
+    createCustomStack = (name) => {
+        if (this.stacks[name]) {
+            throw new Error(`Custom stack named ${name} has already been created`);
+        }
+        const stack = this.getStackFor(name);
+        // this is safe even if stack is cached from an earlier invocation because storeAttributionMetadata is a noop if the stack description already exists
+        this.attributionMetadataStorage.storeAttributionMetadata(stack, `custom`, fileURLToPath(new URL('../../package.json', import.meta.url)));
+        return stack;
+    };
+    /**
+     * Returns a cached NestedStack if resourceGroupName has been seen before
+     * Otherwise, creates a new NestedStack, caches it and returns it
+     */
+    getStackFor = (resourceGroupName) => {
+        if (!this.stacks[resourceGroupName]) {
+            this.stacks[resourceGroupName] = new NestedStack(this.rootStack, resourceGroupName);
+        }
+        return this.stacks[resourceGroupName];
+    };
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibmVzdGVkX3N0YWNrX3Jlc29sdmVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vc3JjL2VuZ2luZS9uZXN0ZWRfc3RhY2tfcmVzb2x2ZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLFdBQVcsRUFBUyxNQUFNLGFBQWEsQ0FBQztBQUVqRCxPQUFPLEVBQUUsYUFBYSxFQUFFLE1BQU0sVUFBVSxDQUFDO0FBVXpDOztHQUVHO0FBQ0gsTUFBTSxPQUFPLG1CQUFtQjtJQU9YO0lBQ0E7SUFQRixNQUFNLEdBQTBCLEVBQUUsQ0FBQztJQUVwRDs7T0FFRztJQUNILFlBQ21CLFNBQWdCLEVBQ2hCLDBCQUFzRDtRQUR0RCxjQUFTLEdBQVQsU0FBUyxDQUFPO1FBQ2hCLCtCQUEwQixHQUExQiwwQkFBMEIsQ0FBNEI7SUFDdEUsQ0FBQztJQUVKOztPQUVHO0lBQ0gsaUJBQWlCLEdBQUcsQ0FBQyxJQUFZLEVBQVMsRUFBRTtRQUMxQyxJQUFJLElBQUksQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLEVBQUU7WUFDckIsTUFBTSxJQUFJLEtBQUssQ0FBQyxzQkFBc0IsSUFBSSwyQkFBMkIsQ0FBQyxDQUFDO1NBQ3hFO1FBQ0QsTUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLFdBQVcsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUNyQyxxSkFBcUo7UUFDckosSUFBSSxDQUFDLDBCQUEwQixDQUFDLHdCQUF3QixDQUN0RCxLQUFLLEVBQ0wsUUFBUSxFQUNSLGFBQWEsQ0FBQyxJQUFJLEdBQUcsQ0FBQyxvQkFBb0IsRUFBRSxNQUFNLENBQUMsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQzlELENBQUM7UUFDRixPQUFPLEtBQUssQ0FBQztJQUNmLENBQUMsQ0FBQztJQUVGOzs7T0FHRztJQUNILFdBQVcsR0FBRyxDQUFDLGlCQUF5QixFQUFTLEVBQUU7UUFDakQsSUFBSSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsaUJBQWlCLENBQUMsRUFBRTtZQUNuQyxJQUFJLENBQUMsTUFBTSxDQUFDLGlCQUFpQixDQUFDLEdBQUcsSUFBSSxXQUFXLENBQzlDLElBQUksQ0FBQyxTQUFTLEVBQ2QsaUJBQWlCLENBQ2xCLENBQUM7U0FDSDtRQUNELE9BQU8sSUFBSSxDQUFDLE1BQU0sQ0FBQyxpQkFBaUIsQ0FBQyxDQUFDO0lBQ3hDLENBQUMsQ0FBQztDQUNIIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgTmVzdGVkU3RhY2ssIFN0YWNrIH0gZnJvbSAnYXdzLWNkay1saWInO1xuaW1wb3J0IHsgQXR0cmlidXRpb25NZXRhZGF0YVN0b3JhZ2UgfSBmcm9tICdAYXdzLWFtcGxpZnkvYmFja2VuZC1vdXRwdXQtc3RvcmFnZSc7XG5pbXBvcnQgeyBmaWxlVVJMVG9QYXRoIH0gZnJvbSAnbm9kZTp1cmwnO1xuXG4vKipcbiAqIFZlbmRzIHN0YWNrcyBmb3IgYSByZXNvdXJjZSBncm91cGluZ1xuICovXG5leHBvcnQgdHlwZSBTdGFja1Jlc29sdmVyID0ge1xuICBnZXRTdGFja0ZvcjogKHJlc291cmNlR3JvdXBOYW1lOiBzdHJpbmcpID0+IFN0YWNrO1xuICBjcmVhdGVDdXN0b21TdGFjazogKG5hbWU6IHN0cmluZykgPT4gU3RhY2s7XG59O1xuXG4vKipcbiAqIFZlbmRzIGFuZCBjYWNoZXMgbmVzdGVkIHN0YWNrcyB1bmRlciBhIHByb3ZpZGVkIHJvb3Qgc3RhY2tcbiAqL1xuZXhwb3J0IGNsYXNzIE5lc3RlZFN0YWNrUmVzb2x2ZXIgaW1wbGVtZW50cyBTdGFja1Jlc29sdmVyIHtcbiAgcHJpdmF0ZSByZWFkb25seSBzdGFja3M6IFJlY29yZDxzdHJpbmcsIFN0YWNrPiA9IHt9O1xuXG4gIC8qKlxuICAgKiBJbml0aWFsaXplIHdpdGggYSByb290IHN0YWNrXG4gICAqL1xuICBjb25zdHJ1Y3RvcihcbiAgICBwcml2YXRlIHJlYWRvbmx5IHJvb3RTdGFjazogU3RhY2ssXG4gICAgcHJpdmF0ZSByZWFkb25seSBhdHRyaWJ1dGlvbk1ldGFkYXRhU3RvcmFnZTogQXR0cmlidXRpb25NZXRhZGF0YVN0b3JhZ2VcbiAgKSB7fVxuXG4gIC8qKlxuICAgKiBQcm94eSB0byBnZXRTdGFja0ZvciB0aGF0IGFwcGVuZHMgYXR0cmlidXRpb24gbWV0YWRhdGEgZm9yIGN1c3RvbSBzdGFja3NcbiAgICovXG4gIGNyZWF0ZUN1c3RvbVN0YWNrID0gKG5hbWU6IHN0cmluZyk6IFN0YWNrID0+IHtcbiAgICBpZiAodGhpcy5zdGFja3NbbmFtZV0pIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcihgQ3VzdG9tIHN0YWNrIG5hbWVkICR7bmFtZX0gaGFzIGFscmVhZHkgYmVlbiBjcmVhdGVkYCk7XG4gICAgfVxuICAgIGNvbnN0IHN0YWNrID0gdGhpcy5nZXRTdGFja0ZvcihuYW1lKTtcbiAgICAvLyB0aGlzIGlzIHNhZmUgZXZlbiBpZiBzdGFjayBpcyBjYWNoZWQgZnJvbSBhbiBlYXJsaWVyIGludm9jYXRpb24gYmVjYXVzZSBzdG9yZUF0dHJpYnV0aW9uTWV0YWRhdGEgaXMgYSBub29wIGlmIHRoZSBzdGFjayBkZXNjcmlwdGlvbiBhbHJlYWR5IGV4aXN0c1xuICAgIHRoaXMuYXR0cmlidXRpb25NZXRhZGF0YVN0b3JhZ2Uuc3RvcmVBdHRyaWJ1dGlvbk1ldGFkYXRhKFxuICAgICAgc3RhY2ssXG4gICAgICBgY3VzdG9tYCxcbiAgICAgIGZpbGVVUkxUb1BhdGgobmV3IFVSTCgnLi4vLi4vcGFja2FnZS5qc29uJywgaW1wb3J0Lm1ldGEudXJsKSlcbiAgICApO1xuICAgIHJldHVybiBzdGFjaztcbiAgfTtcblxuICAvKipcbiAgICogUmV0dXJucyBhIGNhY2hlZCBOZXN0ZWRTdGFjayBpZiByZXNvdXJjZUdyb3VwTmFtZSBoYXMgYmVlbiBzZWVuIGJlZm9yZVxuICAgKiBPdGhlcndpc2UsIGNyZWF0ZXMgYSBuZXcgTmVzdGVkU3RhY2ssIGNhY2hlcyBpdCBhbmQgcmV0dXJucyBpdFxuICAgKi9cbiAgZ2V0U3RhY2tGb3IgPSAocmVzb3VyY2VHcm91cE5hbWU6IHN0cmluZyk6IFN0YWNrID0+IHtcbiAgICBpZiAoIXRoaXMuc3RhY2tzW3Jlc291cmNlR3JvdXBOYW1lXSkge1xuICAgICAgdGhpcy5zdGFja3NbcmVzb3VyY2VHcm91cE5hbWVdID0gbmV3IE5lc3RlZFN0YWNrKFxuICAgICAgICB0aGlzLnJvb3RTdGFjayxcbiAgICAgICAgcmVzb3VyY2VHcm91cE5hbWVcbiAgICAgICk7XG4gICAgfVxuICAgIHJldHVybiB0aGlzLnN0YWNrc1tyZXNvdXJjZUdyb3VwTmFtZV07XG4gIH07XG59XG4iXX0=

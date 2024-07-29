@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.IAMServiceException = void 0;
+const tslib_1 = require("tslib");
+tslib_1.__exportStar(require("./IAMClient"), exports);
+tslib_1.__exportStar(require("./IAM"), exports);
+tslib_1.__exportStar(require("./commands"), exports);
+tslib_1.__exportStar(require("./pagination"), exports);
+tslib_1.__exportStar(require("./waiters"), exports);
+tslib_1.__exportStar(require("./models"), exports);
+var IAMServiceException_1 = require("./models/IAMServiceException");
+Object.defineProperty(exports, "IAMServiceException", { enumerable: true, get: function () { return IAMServiceException_1.IAMServiceException; } });

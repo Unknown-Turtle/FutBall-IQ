@@ -1,0 +1,16 @@
+import { CfnElement, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+/**
+ * Amplify-specific Stack implementation to handle cross-cutting concerns for all Amplify stacks
+ */
+export declare class AmplifyStack extends Stack {
+    /**
+     * Default constructor
+     */
+    constructor(scope: Construct, id: string);
+    /**
+     * Overrides Stack.allocateLogicalId to prevent redundant nested stack logical IDs
+     */
+    allocateLogicalId: (element: CfnElement) => string;
+}
+//# sourceMappingURL=amplify_stack.d.ts.map
