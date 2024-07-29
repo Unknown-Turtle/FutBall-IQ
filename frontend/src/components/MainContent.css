@@ -1,0 +1,36 @@
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.welcome {
+  margin-bottom: 20px;
+}
+
+.welcome img {
+  max-width: 100%;
+  height: auto;
+}
+
+.featured-articles {
+  margin-top: 20px;
+}
+
+.articles {
+  display: flex;
+  gap: 20px;
+}
+
+.articles article {
+  flex: 1;
+  background-color: #555;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.divider {
+  border: none;
+  border-top: 1px dashed #fff;
+  margin: 20px 0;
+}

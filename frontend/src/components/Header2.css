@@ -1,0 +1,49 @@
+.header2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 10px 20px;
+    border-bottom: 1px dashed #fff;
+  }
+  
+  .home-button {
+    display: flex;
+    align-items: center;
+  }
+  
+  .home-button-img {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .search-bar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    max-width: 400px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background-color: #444;
+    color: #fff;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .nav-links a:hover {
+    text-decoration: underline;
+  }
