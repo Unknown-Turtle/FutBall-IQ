@@ -6,7 +6,7 @@ function Footer() {
     <footer className="footer">
       <p>Stay Updated: Placeholder</p>
       <div className="color-palette">
-        {/* Placeholder for color palette */}
+        {/* Placeholder for color palete */}
         <div className="color-swatch"></div>
         <div className="color-swatch"></div>
         <div className="color-swatch"></div>
