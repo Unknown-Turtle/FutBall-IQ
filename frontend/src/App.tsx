@@ -51,9 +51,9 @@ const App: React.FC = () => {
             <Route path="/about" element={<Layout><About /></Layout>} />
           </Routes>
           <Footer />
+          <Analytics />
         </div>
       </Router>
-      <Analytics />
     </SocialProvider>
   );
 };
