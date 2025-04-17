@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './MainContent.css';
-import axios from 'axios';
 
-function MainContent() {
-
+const MainContent: React.FC = () => {
   return (
     <main className="main-content">
       <hr className="divider"/>
-
       
       <section className="about-section">
         <h2>About FutBall-IQ</h2>
@@ -29,7 +26,6 @@ function MainContent() {
       </section>
 
       <hr className="divider"/>
-
       
       <section className="player-overview">
         <h2>Player Overview</h2>
@@ -46,7 +42,6 @@ function MainContent() {
       </section>
 
       <hr className="divider"/>
-
       
       <section className="team-overview">
         <h2>Team Overview</h2>
@@ -65,6 +60,6 @@ function MainContent() {
       <hr className="divider"/>
     </main>
   );
-}
+};
 
-export default MainContent;
+export default MainContent; 

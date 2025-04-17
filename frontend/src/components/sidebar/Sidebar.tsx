@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sidebar.css';
 
-function Sidebar() {
+const Sidebar: React.FC = () => {
   return (
     <aside className="sidebar">
       <div className="sidebar-menu">
@@ -22,6 +22,6 @@ function Sidebar() {
       </div>
     </aside>
   );
-}
+};
 
-export default Sidebar;
+export default Sidebar; 

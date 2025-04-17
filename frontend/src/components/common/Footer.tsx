@@ -1,7 +1,7 @@
 import React from 'react';
 import './Footer.css';
 
-function Footer() {
+const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <p>Stay Updated: Placeholder</p>
@@ -15,6 +15,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
-export default Footer;
+export default Footer; 

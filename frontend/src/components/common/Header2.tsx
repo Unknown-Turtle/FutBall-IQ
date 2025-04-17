@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header2.css';
 
-function Header2() {
+const Header2: React.FC = () => {
   return (
     <header className="header2">
       <div className="home-button">
@@ -20,6 +20,6 @@ function Header2() {
       </nav>
     </header>
   );
-}
+};
 
-export default Header2;
+export default Header2; 

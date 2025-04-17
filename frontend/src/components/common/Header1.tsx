@@ -1,8 +1,8 @@
 import React from 'react';
 import './Header1.css';
 
-function Header1() {
-  const teamLogos = [
+const Header1: React.FC = () => {
+  const teamLogos: string[] = [
     'team1.png', 'team2.png', 'team3.png', 'team4.png', 'team5.png',
     'team6.png', 'team7.png', 'team8.png', 'team9.png', 'team10.png',
     'team11.png', 'team12.png', 'team13.png', 'team14.png', 'team15.png',
@@ -16,6 +16,6 @@ function Header1() {
       ))}
     </header>
   );
-}
+};
 
-export default Header1;
+export default Header1; 

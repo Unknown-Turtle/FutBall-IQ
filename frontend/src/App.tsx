@@ -10,7 +10,7 @@ import Players from './components/players/Players';
 import About from './components/about/About';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
   return (
     <Router>
       <div className="app">
@@ -29,6 +29,6 @@ function App() {
       </div>
     </Router>
   );
-}
+};
 
-export default App;
+export default App; 

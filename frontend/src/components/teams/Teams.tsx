@@ -1,13 +1,13 @@
 import React from 'react';
 import './Teams.css';
 
-function Teams() {
+const Teams: React.FC = () => {
   return (
     <div className="teams">
       <h2>Teams</h2>
       <p>ummm</p>
     </div>
   );
-}
+};
 
-export default Teams;
+export default Teams; 
