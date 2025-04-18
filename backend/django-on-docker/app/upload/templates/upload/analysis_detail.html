@@ -1,0 +1,236 @@
+{% extends "upload/base.html" %}
+
+{% block title %}Analysis - {{ analysis.match }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .timeline {
+        position: relative;
+        height: 4px;
+        background-color: #e9ecef;
+        margin: 2rem 0;
+        cursor: pointer;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background-color: #007bff;
+        border-radius: 50%;
+        top: -4px;
+        transform: translateX(-50%);
+    }
+
+    .timeline-marker:hover {
+        background-color: #0056b3;
+    }
+
+    .timeline-tooltip {
+        position: absolute;
+        bottom: 20px;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Match Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h6>Match Information</h6>
+                    <p class="mb-1">
+                        <strong>{{ analysis.match.home_team }}</strong> vs <strong>{{ analysis.match.away_team }}</strong>
+                    </p>
+                    <p class="text-muted mb-1">{{ analysis.match.match_date|date:"F d, Y H:i" }}</p>
+                    <p class="mb-0">
+                        <span class="badge bg-primary">{{ analysis.match.get_match_type_display }}</span>
+                        <span class="badge {% if analysis.status == 'COMPLETED' %}bg-success{% elif analysis.status == 'FAILED' %}bg-danger{% else %}bg-warning{% endif %}">
+                            {{ analysis.get_status_display }}
+                        </span>
+                    </p>
+                </div>
+
+                {% if analysis.match.video_file %}
+                    <div class="ratio ratio-16x9 mb-3">
+                        <video id="match-video" controls>
+                            <source src="{{ analysis.match.video_file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+
+                    <div class="timeline" id="video-timeline">
+                        {% for metric in metrics %}
+                            <div class="timeline-marker" style="left: {{ metric.timestamp_percentage }}%"
+                                 data-timestamp="{{ metric.timestamp }}"
+                                 data-metric-type="{{ metric.get_metric_type_display }}"
+                                 data-team="{{ metric.team }}"
+                                 data-value="{{ metric.value|safe }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <h6>Analysis Notes</h6>
+                    <p>{{ analysis.notes|linebreaks|default:"No notes provided." }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Add Metric</h5>
+            </div>
+            <div class="card-body">
+                <form id="metric-form" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="metric_type" class="form-label">Metric Type</label>
+                                <select name="metric_type" id="metric_type" class="form-select" required>
+                                    <option value="">Select Metric Type</option>
+                                    <option value="POSSESSION">Ball Possession</option>
+                                    <option value="SHOTS">Shots</option>
+                                    <option value="PASSES">Passes</option>
+                                    <option value="TACKLES">Tackles</option>
+                                    <option value="CUSTOM">Custom Metric</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="team" class="form-label">Team</label>
+                                <select name="team" id="team" class="form-select" required>
+                                    <option value="">Select Team</option>
+                                    <option value="{{ analysis.match.home_team.id }}">{{ analysis.match.home_team }}</option>
+                                    <option value="{{ analysis.match.away_team.id }}">{{ analysis.match.away_team }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="value" class="form-label">Value</label>
+                        <textarea name="value" id="value" class="form-control" rows="3" required
+                                placeholder="Enter metric value (for possession: percentage, for shots: coordinates, etc.)"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="timestamp" class="form-label">Video Timestamp (seconds)</label>
+                        <input type="number" name="timestamp" id="timestamp" class="form-control" step="0.1" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Metric</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Metrics Timeline</h5>
+            </div>
+            <div class="card-body">
+                {% if metrics %}
+                    <div class="list-group">
+                        {% for metric in metrics %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ metric.get_metric_type_display }}</h6>
+                                    <small>{{ metric.timestamp|floatformat:1 }}s</small>
+                                </div>
+                                <p class="mb-1">Team: {{ metric.team }}</p>
+                                <small class="text-muted">Value: {{ metric.value|safe }}</small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No metrics recorded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Handle metric form submission via AJAX
+    document.getElementById('metric-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        
+        fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                location.reload();
+            }
+        });
+    });
+
+    // Video timeline interaction
+    const video = document.getElementById('match-video');
+    const timeline = document.getElementById('video-timeline');
+
+    if (timeline) {
+        timeline.addEventListener('click', function(e) {
+            const rect = timeline.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percentage = x / rect.width;
+            const time = percentage * video.duration;
+            video.currentTime = time;
+        });
+
+        // Show tooltips on timeline markers
+        const markers = document.querySelectorAll('.timeline-marker');
+        markers.forEach(marker => {
+            marker.addEventListener('mouseenter', function(e) {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'timeline-tooltip';
+                tooltip.textContent = `${marker.dataset.metricType} - ${marker.dataset.team} (${marker.dataset.timestamp}s)`;
+                marker.appendChild(tooltip);
+            });
+
+            marker.addEventListener('mouseleave', function(e) {
+                const tooltip = marker.querySelector('.timeline-tooltip');
+                if (tooltip) {
+                    tooltip.remove();
+                }
+            });
+
+            marker.addEventListener('click', function(e) {
+                e.stopPropagation();
+                video.currentTime = parseFloat(marker.dataset.timestamp);
+            });
+        });
+    }
+
+    // Update timestamp field with current video time
+    if (video) {
+        video.addEventListener('timeupdate', function() {
+            document.getElementById('timestamp').value = video.currentTime.toFixed(1);
+        });
+    }
+</script>
+{% endblock %}
+{% endblock %} 

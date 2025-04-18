@@ -1,0 +1,62 @@
+{% extends "upload/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Recent Matches</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_matches %}
+                    <div class="list-group">
+                        {% for match in recent_matches %}
+                            <a href="{% url 'match_detail' match.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ match.home_team }} vs {{ match.away_team }}</h6>
+                                    <small>{{ match.match_date|date:"M d, Y" }}</small>
+                                </div>
+                                <small class="text-muted">{{ match.get_match_type_display }}</small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No matches uploaded yet.</p>
+                {% endif %}
+                <div class="mt-3">
+                    <a href="{% url 'upload_match' %}" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload New Match
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Your Recent Analyses</h5>
+            </div>
+            <div class="card-body">
+                {% if user_analyses %}
+                    <div class="list-group">
+                        {% for analysis in user_analyses %}
+                            <a href="{% url 'analysis_detail' analysis.id %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ analysis.match }}</h6>
+                                    <small>{{ analysis.created_at|date:"M d, Y" }}</small>
+                                </div>
+                                <small class="text-muted">Status: {{ analysis.get_status_display }}</small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">You haven't created any analyses yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
