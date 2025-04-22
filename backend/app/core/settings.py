@@ -29,9 +29,9 @@ INSTALLED_APPS = [
     
     # Local apps
     'teams.apps.TeamsConfig',
-    'players.apps.PlayersConfig',
-    'stats.apps.StatsConfig',
-    'predictions.apps.PredictionsConfig',
+    # 'players.apps.PlayersConfig',  # To be added later
+    # 'stats.apps.StatsConfig',      # To be added later
+    # 'predictions.apps.PredictionsConfig',  # To be added later
 ]
 
 MIDDLEWARE = [
