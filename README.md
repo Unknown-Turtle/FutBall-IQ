@@ -1,4 +1,4 @@
-# FutBall-IQ 🎯⚽
+# FutBall-IQ ⚽
 
 A football analytics platform that provides insights into Premier League player performance, team statistics, and data analytics.
 
