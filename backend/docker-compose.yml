@@ -7,19 +7,26 @@ services:
     volumes:
       - ./app/:/usr/src/app/
     ports:
-      - 8000:8000
+      - "8000:8000"
     env_file:
       - ./.env.dev
     depends_on:
       - db
+      - redis
+
   db:
-    image: postgres:15
+    image: postgres:13
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=hello_django
-      - POSTGRES_PASSWORD=hello_django
-      - POSTGRES_DB=hello_django_dev
+      - POSTGRES_USER=futballiq_user
+      - POSTGRES_PASSWORD=futballiq_password
+      - POSTGRES_DB=futballiq_dev
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
 
 volumes:
-  postgres_data:
+  postgres_data: 
