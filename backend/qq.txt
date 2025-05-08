@@ -1,0 +1,1 @@
+python manage.py scrape_fbref_data --season_year 2024 --league_name "Premier League"

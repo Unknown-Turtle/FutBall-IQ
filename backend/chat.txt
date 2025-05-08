@@ -1,0 +1,13 @@
+Create a Directory for Raw Data: We'll designate a place to store the raw files, for example, backend/app/raw_data/fbref/.
+Save DataFrames to Files: Immediately after fetching each DataFrame (schedule_df, player_stats_df, team_stats_df, etc.) within the management command, we'll save it to a file in that directory. CSV format is often convenient. We can name the files descriptively, like schedule_ENG-Premier League_2024.csv.
+Proceed with Normalization (Using In-Memory Data): After saving the raw file as a backup, we'll continue with the normalization logic using the DataFrame that's already loaded in memory. This avoids reading the file back immediately.
+Update .gitignore: Add the raw_data/ directory to your .gitignore file so that these potentially large raw data files aren't accidentally committed to your Git repository.
+Implementation Steps:
+I'll modify the scrape_fbref_data.py command:
+Add import os.
+Define the path for the raw data directory.
+Use os.makedirs(..., exist_ok=True) to create the directory if it doesn't exist.
+After successfully fetching each DataFrame, add a line like df.to_csv(filepath, index=False) to save it.
+I'll modify the main .gitignore file to include backend/app/raw_data/.
+This way, each run of the command fetches the data, saves a raw copy to disk for backup/reference, and then proceeds to the (currently commented out) normalization steps using the data it just fetched.
+Shall I proceed with these modifications?
