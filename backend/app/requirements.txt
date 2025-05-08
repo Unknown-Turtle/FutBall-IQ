@@ -1,6 +1,6 @@
 Django==4.2.7
 djangorestframework==3.14.0
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.10
 django-cors-headers==4.3.0
 redis==5.0.1
 django-redis==5.4.0
@@ -12,4 +12,6 @@ gunicorn==21.2.0
 Pillow==10.1.0
 django-filter==23.3
 drf-yasg==1.21.7
-celery==5.3.4 
+celery==5.3.4
+requests
+ScraperFC
