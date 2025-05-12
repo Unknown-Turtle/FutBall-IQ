@@ -29,8 +29,8 @@ INSTALLED_APPS = [
     
     # Local apps
     'teams.apps.TeamsConfig',
+    'players.apps.PlayersConfig',
     'football_data',
-    # 'players.apps.PlayersConfig',  # To be added later
     # 'stats.apps.StatsConfig',      # To be added later
     # 'predictions.apps.PredictionsConfig',  # To be added later
 ]

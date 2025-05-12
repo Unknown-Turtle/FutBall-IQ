@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include([
         path('teams/', include('teams.urls')),
-        # path('players/', include('players.urls')),  # To be added later
+        path('players/', include('players.urls')),  # Now enabled
         # path('stats/', include('stats.urls')),      # To be added later
         # path('predictions/', include('predictions.urls')),  # To be added later
     ])),
