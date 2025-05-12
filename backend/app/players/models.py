@@ -46,7 +46,7 @@ class Player(models.Model):
     shots = models.IntegerField(default=0)
     shots_on_target = models.IntegerField(default=0)
     key_passes = models.IntegerField(default=0)
-    pass_completion = models.FloatField(default=0.0)  # Percentage
+    pass_completion = models.FloatField(null=True, blank=True, default=0.0)  # Percentage
     tackles = models.IntegerField(default=0)
     interceptions = models.IntegerField(default=0)
     
